@@ -20,19 +20,13 @@ class AClient(commands.Bot):
 
         super().__init__(command_prefix="!", intents=intents)
         self.synced = False
+        self.presence_task = None  # Variável para armazenar a tarefa de presença
 
     async def on_ready(self):
-        await self.wait_until_ready()
-        if not self.synced:
-            try:
-                await self.tree.sync()  # 🔥 Agora os comandos serão globais!
-                self.synced = True
-                print(f"✅ Comandos sincronizados globalmente.")
-            except Exception as e:
-                print(f"❌ Erro ao sincronizar os comandos: {e}")
-
         print(f"🚀 Bot conectado como {self.user}.")
-        self.loop.create_task(self.update_presence())
+
+        if self.presence_task is None:  # Evita a criação de múltiplos loops
+            self.presence_task = self.loop.create_task(self.update_presence())
 
     async def update_presence(self):
         statuses = [
@@ -47,18 +41,29 @@ class AClient(commands.Bot):
             await asyncio.sleep(4)
 
     async def setup_hook(self):
+        # 🔥 Carregar as Cogs
         for cog in ["cogs.limpar", "cogs.rank", "cogs.menu"]:
             try:
                 await self.load_extension(cog)
-                print(f"Cog '{cog}' carregada.")
+                print(f"✅ Cog '{cog}' carregada.")
             except Exception as e:
-                print(f"Erro ao carregar cog '{cog}': {e}")
+                print(f"❌ Erro ao carregar cog '{cog}': {e}")
+
+        # 🔥 Sincronizar comandos
+        try:
+            synced = await self.tree.sync()
+            print(f"✅ {len(synced)} comandos sincronizados globalmente.")
+        except Exception as e:
+            print(f"❌ Erro ao sincronizar comandos: {e}")
 
 # Inicializa o bot
 client = AClient()
 
 # Executa o bot
 if TOKEN:
-    client.run(TOKEN)
+    try:
+        client.run(TOKEN)
+    except discord.LoginFailure:
+        print("❌ Erro: Token inválido. Verifique se o .env contém o token correto.")
 else:
     print("❌ Erro: Token do bot não encontrado. Certifique-se de que o arquivo .env está configurado corretamente.")
