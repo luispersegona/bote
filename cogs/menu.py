@@ -4,11 +4,10 @@ from defi.cargos import criar_cargos  # Importa a classe Cargos para usar a lóg
 from defi.deletar_cargos import deletar_cargos  # Importa a função de deletar cargos
 from defi.criar_salas import Salas  # Importa a classe Salas
 
-guild_id = 1317859302157058048  # Defina o ID da guilda para registrar o comando
 
 async def setup(bot):
     # Registra o comando '/menu' com a interação de slash
-    @bot.tree.command(guild=discord.Object(id=guild_id), name='menu', description='Comando de teste com paginação')
+    @bot.tree.command(name='menu', description='Comando de teste com paginação')
     async def slash2(interaction: discord.Interaction):
         # Cria a embed inicial sem o botão "Ação"
         embed = discord.Embed(
