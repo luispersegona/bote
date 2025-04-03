@@ -1,10 +1,9 @@
 import discord
 from discord import app_commands
 
-guild_id = 1317859302157058048  # Defina o ID da guilda para registrar o comando
 
 async def setup(bot):
-    @bot.tree.command(guild=discord.Object(id=guild_id), name='limpar', description='Apaga todas as mensagens da sala atual')
+    @bot.tree.command(name='limpar', description='Apaga todas as mensagens da sala atual')
     async def limpar(interaction: discord.Interaction):
         # Verifica se o usuário tem permissões administrativas
         if not interaction.user.guild_permissions.administrator:
