@@ -25,6 +25,14 @@ class AClient(commands.Bot):
     async def on_ready(self):
         print(f"🚀 Bot conectado como {self.user}.")
 
+        # 🔥 Lista os servidores conectados
+        if self.guilds:
+            print("✅ O bot está presente nos seguintes servidores:")
+            for guild in self.guilds:
+                print(f"  📌 {guild.name} (ID: {guild.id})")
+        else:
+            print("⚠️ O bot não está em nenhum servidor.")
+
         if self.presence_task is None:  # Evita a criação de múltiplos loops
             self.presence_task = self.loop.create_task(self.update_presence())
 
