@@ -4,8 +4,6 @@ import requests
 from defi.cargos import rank_info  # Importa o dicionário de cargos
 
 
-guild_id = 1317859302157058048  # Defina o ID da guilda para registrar o comando
-
 RANK_IMAGES = {
     "Unranked": "https://i.postimg.cc/75NSKRQT/unranked-removebg-preview.png",
     "Bronze 1": "https://i.postimg.cc/34tLzRSm/bronze1-removebg-preview.png",
@@ -38,9 +36,8 @@ RANK_IMAGES = {
 }
 
 
-# Define a cog do comando /rank
 async def setup(bot):
-    @bot.tree.command(guild=discord.Object(id=guild_id), name='rank', description='Consulta as estatísticas da temporada do jogador PUBG.')
+    @bot.tree.command(name='rank', description='Consulta as estatísticas da temporada do jogador PUBG.')
     async def rank(interaction: discord.Interaction, player_name: str):
         """
         Consulta as estatísticas da temporada atual para um jogador e envia em uma embed.
